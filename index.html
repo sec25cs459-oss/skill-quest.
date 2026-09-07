@@ -7,7 +7,30 @@
 <title>Skill Quest</title>
 
 <style>
+.logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 25px;
+}
 
+.logos img {
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+}
+
+@media (max-width: 500px) {
+    .logos img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .logos {
+        gap: 18px;
+    }
+}
 /* =========================
    GLOBAL
 ========================= */
