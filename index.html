@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Skill Quest</title>
+
+<style>
+
+/* =========================
+   GLOBAL
+========================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #070b13;
+    color: #ffffff;
+    min-height: 100vh;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+
+/* =========================
+   APP
+========================= */
+
+.app {
+    width: 100%;
+    max-width: 760px;
+    margin: auto;
+    padding: 25px 18px 40px;
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+.hero {
+    text-align: center;
+    padding: 35px 10px;
+}
+
+.badge {
+    display: inline-block;
+    border: 1px solid #334155;
+    background: #101827;
+    padding: 8px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #9fb9ff;
+}
+
+.hero h1 {
+    font-size: clamp(45px, 12vw, 80px);
+    margin-top: 20px;
+    line-height: 0.95;
+    letter-spacing: -4px;
+}
+
+.hero h1 span {
+    color: #6ea8ff;
+}
+
+.hero p {
+    color: #9ca8bb;
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+.name-input {
+    width: min(350px, 100%);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    background: #111827;
+    color: white;
+    outline: none;
+}
+
+.name-input:focus {
+    border-color: #6ea8ff;
+}
+
+
+/* =========================
+   GAME CARDS
+========================= */
+
+.games {
+    display: grid;
+    gap: 15px;
+}
+
+.game-card {
+    width: 100%;
+    text-align: left;
+    padding: 22px;
+    border-radius: 20px;
+    border: 1px solid #263244;
+    background: #111827;
+    color: white;
+    transition: 0.2s;
+}
+
+.game-card:hover {
+    transform: translateY(-3px);
+    border-color: #6ea8ff;
+}
+
+.game-icon {
+    font-size: 35px;
+    margin-bottom: 12px;
+}
+
+.game-card h2 {
+    font-size: 20px;
+    margin-bottom: 7px;
+}
+
+.game-card p {
+    color: #9ca8bb;
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+.play {
+    color: #6ea8ff;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+
+/* =========================
+   GAME SCREEN
+========================= */
+
+.game-screen {
+    display: none;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.game-title {
+    font-size: 20px;
+}
+
+.timer {
+    background: #151e2e;
+    border: 1px solid #334155;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+
+/* =========================
+   QUESTION
+========================= */
+
+.question-box {
+    background: #111827;
+    border: 1px solid #263244;
+    padding: 22px;
+    border-radius: 18px;
+    margin-bottom: 15px;
+}
+
+.question-box h2 {
+    font-size: 22px;
+    line-height: 1.3;
+}
+
+.question-box p {
+    color: #aeb9ca;
+    margin-top: 10px;
+    line-height: 1.5;
+}
+
+
+/* =========================
+   OPTIONS
+========================= */
+
+.options {
+    display: grid;
+    gap: 10px;
+}
+
+.option {
+    width: 100%;
+    text-align: left;
+    padding: 15px;
+    border-radius: 13px;
+    background: #141d2c;
+    border: 1px solid #334155;
+    color: white;
+    transition: 0.15s;
+}
+
+.option:hover {
+    border-color: #6ea8ff;
+}
+
+.option.correct {
+    border-color: #54d38a;
+}
+
+.option.wrong {
+    border-color: #ff6b6b;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.primary-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 15px;
+    border: none;
+    border-radius: 13px;
+    background: #6ea8ff;
+    color: #07101e;
+    font-weight: bold;
+}
+
+.secondary-btn {
+    margin-top: 15px;
+    width: 100%;
+    padding: 14px;
+    border-radius: 13px;
+    border: 1px solid #334155;
+    background: transparent;
+    color: white;
+}
+
+
+/* =========================
+   RESULT
+========================= */
+
+.result {
+    display: none;
+    text-align: center;
+    background: #111827;
+    border: 1px solid #263244;
+    border-radius: 20px;
+    padding: 30px 20px;
+}
+
+.result-icon {
+    font-size: 60px;
+    margin-bottom: 15px;
+}
+
+.result h1 {
+    margin-bottom: 10px;
+}
+
+.score {
+    font-size: 55px;
+    font-weight: bold;
+    color: #6ea8ff;
+    margin: 20px 0;
+}
+
+.result p {
+    color: #aeb9ca;
+    line-height: 1.5;
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.stat {
+    background: #151e2e;
+    border: 1px solid #263244;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.stat small {
+    color: #8d9ab0;
+}
+
+.stat strong {
+    display: block;
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+
+/* =========================
+   ESCAPE ROOM
+========================= */
+
+.escape-room {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.room-item {
+    padding: 25px 10px;
+    border-radius: 15px;
+    border: 1px solid #334155;
+    background: #141d2c;
+    text-align: center;
+}
+
+.room-item div {
+    font-size: 35px;
+    margin-bottom: 8px;
+}
+
+.room-item span {
+    font-size: 13px;
+    color: #aeb9ca;
+}
+
+
+/* =========================
+   CLUE
+========================= */
+
+.clue {
+    background: #0c1320;
+    border: 1px dashed #52627a;
+    padding: 18px;
+    border-radius: 13px;
+    margin: 15px 0;
+    line-height: 1.6;
+}
+
+.code {
+    font-family: monospace;
+    font-size: 18px;
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    text-align: center;
+    margin-top: 35px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 500px) {
+
+    .app {
+        padding: 15px 14px 30px;
+    }
+
+    .hero {
+        padding-top: 25px;
+    }
+
+    .hero h1 {
+        font-size: 55px;
+    }
+
+    .game-header {
+        align-items: flex-start;
+    }
+
+    .question-box h2 {
+        font-size: 19px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<main class="app">
+
+
+<!-- =========================
+     HOME
+========================= -->
+
+<section id="home">
+
+    <div class="hero">
+
+        <div class="badge">
+            ⚡ SKILL DEVELOPMENT CLUB
+        </div>
+
+        <h1>
+            SKILL <span>QUEST</span>
+        </h1>
+
+        <p>
+            Think fast. Make decisions. Beat the challenge.
+        </p>
+
+        <input
+            id="playerName"
+            class="name-input"
+            maxlength="20"
+            placeholder="Enter your name"
+        >
+
+    </div>
+
+
+    <div class="games">
+
+
+        <!-- CEO -->
+
+        <button
+            class="game-card"
+            onclick="startCEO()"
+        >
+
+            <div class="game-icon">
+                🧑‍💼
+            </div>
+
+            <h2>
+                24 HOURS: CEO
+            </h2>
+
+            <p>
+                You're the CEO. Your company is in trouble.
+                Make the right decisions before time runs out.
+            </p>
+
+            <span class="play">
+                PLAY GAME →
+            </span>
+
+        </button>
+
+
+        <!-- MACHINE -->
+
+        <button
+            class="game-card"
+            onclick="startMachine()"
+        >
+
+            <div class="game-icon">
+                🤖
+            </div>
+
+            <h2>
+                HUMAN VS MACHINE
+            </h2>
+
+            <p>
+                Test your memory, logic and problem-solving
+                against the machine.
+            </p>
+
+            <span class="play">
+                PLAY GAME →
+            </span>
+
+        </button>
+
+
+        <!-- ESCAPE -->
+
+        <button
+            class="game-card"
+            onclick="startEscape()"
+        >
+
+            <div class="game-icon">
+                🚪
+            </div>
+
+            <h2>
+                DIGITAL ESCAPE
+            </h2>
+
+            <p>
+                Search for clues, solve puzzles and
+                escape the digital room.
+            </p>
+
+            <span class="play">
+                PLAY GAME →
+            </span>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     GAME SCREEN
+========================= -->
+
+<section
+    id="gameScreen"
+    class="game-screen"
+>
+
+    <div class="game-header">
+
+        <div
+            id="gameTitle"
+            class="game-title">
+        </div>
+
+        <div
+            id="timer"
+            class="timer">
+        </div>
+
+    </div>
+
+    <div id="gameContent"></div>
+
+</section>
+
+
+<!-- =========================
+     RESULT
+========================= -->
+
+<section
+    id="result"
+    class="result"
+>
+
+    <div class="result-icon">
+        🏆
+    </div>
+
+    <h1 id="resultTitle">
+        Challenge Complete!
+    </h1>
+
+    <div
+        id="finalScore"
+        class="score">
+        0
+    </div>
+
+    <p id="resultMessage">
+    </p>
+
+    <div class="stats">
+
+        <div class="stat">
+            <small>PLAYER</small>
+            <strong id="resultPlayer">
+                -
+            </strong>
+        </div>
+
+        <div class="stat">
+            <small>SCORE</small>
+            <strong id="resultScore">
+                0
+            </strong>
+        </div>
+
+    </div>
+
+    <button
+        class="primary-btn"
+        onclick="playAgain()"
+    >
+        PLAY AGAIN
+    </button>
+
+    <button
+        class="secondary-btn"
+        onclick="goHome()"
+    >
+        BACK TO HOME
+    </button>
+
+</section>
+
+
+<footer>
+    Skill Quest • Scan • Play • Learn
+</footer>
+
+</main>
+
+
+<script>
+
+/* =====================================================
+   GLOBAL VARIABLES
+===================================================== */
+
+let playerName = "Player";
+let score = 0;
+let currentGame = "";
+let timerInterval = null;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const home = document.getElementById("home");
+
+const gameScreen =
+    document.getElementById("gameScreen");
+
+const result =
+    document.getElementById("result");
+
+const gameTitle =
+    document.getElementById("gameTitle");
+
+const gameContent =
+    document.getElementById("gameContent");
+
+const timer =
+    document.getElementById("timer");
+
+
+/* =====================================================
+   START GAME
+===================================================== */
+
+function prepareGame() {
+
+    playerName =
+        document.getElementById("playerName")
+        .value
+        .trim();
+
+    if (playerName === "") {
+        playerName = "Player";
+    }
+
+    home.style.display = "none";
+
+    result.style.display = "none";
+
+    gameScreen.style.display = "block";
+
+    window.scrollTo(0, 0);
+}
+
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+function startTimer(seconds, callback) {
+
+    clearInterval(timerInterval);
+
+    let remaining = seconds;
+
+    updateTimer(remaining);
+
+    timerInterval = setInterval(() => {
+
+        remaining--;
+
+        updateTimer(remaining);
+
+        if (remaining <= 0) {
+
+            clearInterval(timerInterval);
+
+            callback();
+
+        }
+
+    }, 1000);
+}
+
+
+function updateTimer(seconds) {
+
+    const minutes =
+        Math.floor(seconds / 60);
+
+    const secs =
+        seconds % 60;
+
+    timer.textContent =
+        String(minutes).padStart(2, "0")
+        + ":"
+        + String(secs).padStart(2, "0");
+}
+
+
+/* =====================================================
+   SHOW RESULT
+===================================================== */
+
+function showResult(title, message) {
+
+    clearInterval(timerInterval);
+
+    gameScreen.style.display = "none";
+
+    result.style.display = "block";
+
+    document.getElementById("resultTitle")
+        .textContent = title;
+
+    document.getElementById("finalScore")
+        .textContent = score;
+
+    document.getElementById("resultMessage")
+        .textContent = message;
+
+    document.getElementById("resultPlayer")
+        .textContent = playerName;
+
+    document.getElementById("resultScore")
+        .textContent = score;
+
+    window.scrollTo(0, 0);
+}
+
+
+/* =====================================================
+   GAME 1
+   24 HOURS CEO
+===================================================== */
+
+const ceoQuestions = [
+
+    {
+        question:
+        "09:00 — Your server crashes. 40% of users cannot access your app.",
+
+        options: [
+            "Move users to backup cloud (-₹30K)",
+            "Wait and save money (-15 reputation)",
+            "Shut down the service (-25 growth)"
+        ],
+
+        correct: 0
+    },
+
+    {
+        question:
+        "12:00 — Your best developer is exhausted before launch.",
+
+        options: [
+            "Give the team a break (-₹10K)",
+            "Force overtime (-20 morale)",
+            "Cancel an important feature (-15 growth)"
+        ],
+
+        correct: 0
+    },
+
+    {
+        question:
+        "17:00 — A competitor launches a similar product.",
+
+        options: [
+            "Launch your strongest feature (-₹25K)",
+            "Spend heavily on advertising (-₹40K)",
+            "Ignore them (-25 reputation)"
+        ],
+
+        correct: 0
+    },
+
+    {
+        question:
+        "21:00 — Your biggest customer asks for a discount.",
+
+        options: [
+            "Give 10% discount",
+            "Refuse immediately",
+            "Offer a longer contract with a smaller discount"
+        ],
+
+        correct: 2
+    }
+
+];
+
+
+let ceoIndex = 0;
+
+
+function startCEO() {
+
+    prepareGame();
+
+    currentGame = "ceo";
+
+    score = 1000;
+
+    ceoIndex = 0;
+
+    gameTitle.textContent =
+        "🧑‍💼 24 HOURS: CEO";
+
+    renderCEO();
+
+    startTimer(180, () => {
+
+        showResult(
+            "⏰ TIME'S UP",
+            "The company needed faster decisions."
+        );
+
+    });
+
+}
+
+
+function renderCEO() {
+
+    if (ceoIndex >= ceoQuestions.length) {
+
+        showResult(
+            "🚀 COMPANY SURVIVED!",
+            "You made it through the crisis. Your leadership score shows how well you handled pressure."
+        );
+
+        return;
+    }
+
+
+    const q =
+        ceoQuestions[ceoIndex];
+
+
+    gameContent.innerHTML = `
+
+        <div class="question-box">
+
+            <h2>
+                ${q.question}
+            </h2>
+
+            <p>
+                Choose the decision you think is best.
+            </p>
+
+        </div>
+
+        <div class="options">
+
+            ${q.options.map((option, index) => `
+
+                <button
+                    class="option"
+                    onclick="answerCEO(${index})"
+                >
+                    ${option}
+                </button>
+
+            `).join("")}
+
+        </div>
+
+    `;
+}
+
+
+function answerCEO(choice) {
+
+    const q =
+        ceoQuestions[ceoIndex];
+
+
+    if (choice === q.correct) {
+
+        score += 300;
+
+    } else {
+
+        score += 100;
+
+    }
+
+    ceoIndex++;
+
+    renderCEO();
+}
+
+
+/* =====================================================
+   GAME 2
+   HUMAN VS MACHINE
+===================================================== */
+
+const machineQuestions = [
+
+    {
+        type: "PATTERN",
+
+        question:
+        "2, 4, 8, 16, ?",
+
+        options: [
+            "20",
+            "24",
+            "32",
+            "36"
+        ],
+
+        correct: 2
+    },
+
+
+    {
+        type: "LOGIC",
+
+        question:
+        "All Bloops are Razzies. All Razzies are Lazzies. Bloops are...",
+
+        options: [
+            "Lazzies",
+            "Not Lazzies",
+            "Neither",
+            "Impossible to know"
+        ],
+
+        correct: 0
+    },
+
+
+    {
+        type: "BINARY",
+
+        question:
+        "What is decimal 5 in binary?",
+
+        options: [
+            "100",
+            "101",
+            "110",
+            "111"
+        ],
+
+        correct: 1
+    },
+
+
+    {
+        type: "ALGORITHM",
+
+        question:
+        "Which is generally fastest for searching a sorted list?",
+
+        options: [
+            "Linear Search",
+            "Binary Search",
+            "Bubble Sort",
+            "Random Search"
+        ],
+
+        correct: 1
+    },
+
+
+    {
+        type: "OBSERVATION",
+
+        question:
+        "Which one is different?",
+
+        options: [
+            "AA8AA",
+            "AA8AA",
+            "AAOAA",
+            "AA8AA"
+        ],
+
+        correct: 2
+    }
+
+];
+
+
+let machineIndex = 0;
+
+
+function startMachine() {
+
+    prepareGame();
+
+    currentGame = "machine";
+
+    score = 0;
+
+    machineIndex = 0;
+
+    gameTitle.textContent =
+        "🤖 HUMAN VS MACHINE";
+
+    renderMachine();
+
+    startTimer(120, () => {
+
+        showResult(
+            "🤖 TIME'S UP",
+            "The machine had the advantage this time."
+        );
+
+    });
+
+}
+
+
+function renderMachine() {
+
+    if (machineIndex >= machineQuestions.length) {
+
+        const machineScore =
+            500 + Math.floor(Math.random() * 300);
+
+        if (score >= machineScore) {
+
+            showResult(
+                "🧠 YOU BEAT THE MACHINE!",
+                `Your score was ${score}. The machine benchmark was ${machineScore}.`
+            );
+
+        } else {
+
+            showResult(
+                "🤖 MACHINE WINS!",
+                `Your score was ${score}. The machine benchmark was ${machineScore}. Try again!`
+            );
+
+        }
+
+        return;
+    }
+
+
+    const q =
+        machineQuestions[machineIndex];
+
+
+    gameContent.innerHTML = `
+
+        <div class="badge">
+            ${q.type}
+        </div>
+
+        <div class="question-box">
+
+            <h2>
+                ${q.question}
+            </h2>
+
+        </div>
+
+        <div class="options">
+
+            ${q.options.map((option, index) => `
+
+                <button
+                    class="option"
+                    onclick="answerMachine(${index})"
+                >
+                    ${option}
+                </button>
+
+            `).join("")}
+
+        </div>
+
+    `;
+
+}
+
+
+function answerMachine(choice) {
+
+    const q =
+        machineQuestions[machineIndex];
+
+
+    if (choice === q.correct) {
+
+        score += 200;
+
+    } else {
+
+        score += 40;
+
+    }
+
+    machineIndex++;
+
+    renderMachine();
+
+}
+
+
+/* =====================================================
+   GAME 3
+   DIGITAL ESCAPE
+===================================================== */
+
+const escapeChallenges = [
+
+    {
+        title: "📧 EMAIL",
+
+        clue:
+        "You find an email containing this sequence:<br><br><b>12 / 24 / 36 / ?</b>",
+
+        question:
+        "What number comes next?",
+
+        answer:
+        "48"
+    },
+
+
+    {
+        title: "📁 FILE",
+
+        clue:
+        "A strange file contains:<br><br><span class='code'>01010011 01001001</span>",
+
+        question:
+        "Decode the binary message.",
+
+        answer:
+        "SI"
+    },
+
+
+    {
+        title: "🔐 SAFE",
+
+        clue:
+        "The file gave you <b>SI</b>.<br><br>Add the first letter of <b>ESCAPE</b>.",
+
+        question:
+        "What is the three-letter key?",
+
+        answer:
+        "SIE"
+    },
+
+
+    {
+        title: "🚪 EXIT",
+
+        clue:
+        "The final panel shows:<br><br><b>12 + 24 + 36</b>",
+
+        question:
+        "Enter the final number to escape.",
+
+        answer:
+        "72"
+    }
+
+];
+
+
+let escapeIndex = 0;
+
+
+function startEscape() {
+
+    prepareGame();
+
+    currentGame = "escape";
+
+    score = 0;
+
+    escapeIndex = 0;
+
+    gameTitle.textContent =
+        "🚪 DIGITAL ESCAPE";
+
+    renderEscape();
+
+    startTimer(300, () => {
+
+        showResult(
+            "⏰ SYSTEM LOCKED",
+            "You ran out of time before finding the final key."
+        );
+
+    });
+
+}
+
+
+function renderEscape() {
+
+    if (escapeIndex >= escapeChallenges.length) {
+
+        showResult(
+            "🔓 YOU ESCAPED!",
+            "You found every clue and solved the digital escape room."
+        );
+
+        return;
+    }
+
+
+    const c =
+        escapeChallenges[escapeIndex];
+
+
+    gameContent.innerHTML = `
+
+        <div class="question-box">
+
+            <h2>
+                ${c.title}
+            </h2>
+
+            <div class="clue">
+                ${c.clue}
+            </div>
+
+            <p>
+                ${c.question}
+            </p>
+
+        </div>
+
+
+        <input
+            id="escapeAnswer"
+            class="name-input"
+            style="width:100%"
+            placeholder="Enter your answer"
+        >
+
+
+        <button
+            class="primary-btn"
+            onclick="submitEscape()"
+        >
+            UNLOCK →
+        </button>
+
+    `;
+
+}
+
+
+function submitEscape() {
+
+    const input =
+        document.getElementById("escapeAnswer");
+
+
+    const answer =
+        input.value.trim().toUpperCase();
+
+
+    const correct =
+        escapeChallenges[escapeIndex]
+        .answer
+        .toUpperCase();
+
+
+    if (answer === correct) {
+
+        score += 500;
+
+        escapeIndex++;
+
+        renderEscape();
+
+    } else {
+
+        input.value = "";
+
+        input.placeholder =
+            "Incorrect — try again";
+
+    }
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function goHome() {
+
+    clearInterval(timerInterval);
+
+    result.style.display = "none";
+
+    gameScreen.style.display = "none";
+
+    home.style.display = "block";
+
+    window.scrollTo(0, 0);
+}
+
+
+function playAgain() {
+
+    if (currentGame === "ceo") {
+
+        startCEO();
+
+    }
+
+    else if (currentGame === "machine") {
+
+        startMachine();
+
+    }
+
+    else if (currentGame === "escape") {
+
+        startEscape();
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
