@@ -31,6 +31,29 @@
         gap: 18px;
     }
 }
+    .join-club {
+    margin-top: 25px;
+    padding: 22px 18px;
+    background: #0c1320;
+    border: 1px solid #334155;
+    border-radius: 18px;
+    text-align: center;
+}
+
+.join-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.join-club h2 {
+    margin-bottom: 8px;
+}
+
+.join-club p {
+    color: #aeb9ca;
+    line-height: 1.5;
+    margin-bottom: 5px;
+}
 /* =========================
    GLOBAL
 ========================= */
@@ -647,6 +670,24 @@ footer {
         PLAY AGAIN
     </button>
 
+    <div class="join-club">
+    <div class="join-icon">🎓</div>
+
+    <h2>Enjoyed Skill Quest?</h2>
+
+    <p>
+        Would you like to join the
+        <strong>Skill Enhancement Club</strong>?
+    </p>
+
+    <button
+        class="primary-btn"
+        onclick="joinClub()"
+    >
+        🚀 YES, I WANT TO JOIN
+    </button>
+</div>
+
     <button
         class="secondary-btn"
         onclick="loadLeaderboard()"
@@ -680,6 +721,12 @@ footer {
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+ function joinClub() {
+    window.open(
+        "https://forms.gle/Jk9ua4QeCbiM9Kmp8",
+        "_blank"
+    );
+}   
 const SUPABASE_URL = "https://jgqrdtopziyqhalgxdxt.supabase.co";
 const SUPABASE_KEY = "sb_publishable_YrwPIA2BAO7jUbE-STkkjg_XJ1cfrUa";
 const { createClient } = supabase;
